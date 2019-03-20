@@ -20,6 +20,8 @@ libraryDependencies ++= {
   val liftVersion = "3.3.0"
   Seq(
     "ch.qos.logback"      %  "logback-classic"    % "1.2.3",
+    "org.apache.shiro"    %  "shiro-core"         % "1.2.4",
+    "com.h2database"      % "h2"                  % "1.4.199",
     "org.eclipse.jetty"   %  "jetty-webapp"       % "9.4.8.v20171121" % "container; compile->default",
     "net.liftweb"         %% "lift-common"        % liftVersion % "compile",
     "net.liftweb"         %% "lift-webkit"        % liftVersion % "compile",

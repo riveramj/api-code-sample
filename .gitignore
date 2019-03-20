@@ -1,3 +1,10 @@
 *.class
 *.log
 *.swp
+*.db
+.DS_Store
+target
+project/project
+project/target
+*.swo
+

@@ -7,7 +7,8 @@ import net.liftweb._
   import common._
   import http._
 
-import com.demo.util._
+import com.demo.model._
+import com.demo.util.Paths
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -15,6 +16,25 @@ import com.demo.util._
  */
 class Boot {
   def boot {
+    if (!DB.jndiJdbcConnAvailable_?) {
+
+      val vendor = 
+        new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
+			     Props.get("db.url") openOr 
+			     "jdbc:h2:./lift_proto.db;AUTO_SERVER=TRUE",
+			     Props.get("db.user"), Props.get("db.password"))
+
+      LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
+
+      DB.defineConnectionManager(util.DefaultConnectionIdentifier, vendor)
+    }
+
+    Schemifier.schemify(
+      true,
+      Schemifier.infoF _,
+      VisitorActivity
+    )
+
 
     // where to search snippet
     LiftRules.addToPackages("com.demo")
@@ -37,7 +57,7 @@ class Boot {
       new Html5Properties(r.userAgent))    
 
     // Make a transaction span the whole HTTP request -> uncomment for DB usage
-    //S.addAround(DB.buildLoanWrapper)
+    S.addAround(DB.buildLoanWrapper)
 
     // set DocType to HTML5
     LiftRules.htmlProperties.default.set((r: Req) =>new Html5Properties(r.userAgent))
