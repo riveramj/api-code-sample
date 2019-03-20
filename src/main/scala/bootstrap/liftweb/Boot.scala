@@ -9,6 +9,7 @@ import net.liftweb._
 
 import com.demo.model._
 import com.demo.util.Paths
+import com.demo.snippet.VisitorAnalyticsApi
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -62,4 +63,6 @@ class Boot {
     // set DocType to HTML5
     LiftRules.htmlProperties.default.set((r: Req) =>new Html5Properties(r.userAgent))
   }
+
+  LiftRules.statelessDispatch.append(VisitorAnalyticsApi)
 }
