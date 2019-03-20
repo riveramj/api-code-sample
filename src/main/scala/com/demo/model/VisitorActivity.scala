@@ -16,11 +16,23 @@ class VisitorActivity extends LongKeyedMapper[VisitorActivity] with IdPK with On
     override def defaultValue = generateLongId
   }
   object userId extends MappedString(this, 300)
-  object clicks extends MappedInt(this)
-  object impressions extends MappedString(this, 100)
+  object event extends MappedEnum(this, EventType)
+  object timeStamp extends MappedDateTime(this)
   object createdAt extends MappedDateTime(this) {
     override def defaultValue = new Date()
+  }
+
+  def createVisitorActivity(userId: String, eventType: EventType.Value, timeStamp: Date) = {
+    VisitorActivity.create
+      .userId(userId)
+      .event(eventType)
+      .timeStamp(timeStamp)
+      .saveMe
   }
 }
 
 object VisitorActivity extends VisitorActivity with LongKeyedMetaMapper[VisitorActivity]
+
+object EventType extends Enumeration {
+  val Click, Impression = Value
+}
